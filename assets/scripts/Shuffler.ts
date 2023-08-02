@@ -13,6 +13,7 @@ enum Defines {
 
 @ccclass('Shuffler')
 export class Shuffler extends Component {
+
     @property(Node)
     private canvas: Node = null;
 
@@ -133,29 +134,24 @@ export class Shuffler extends Component {
     }
 
     onLoad() {
-        this.music.play();
         let col_ord = this.shuffle([1, 2, 3, 4, 5, 6, 7, 8]);
 
-        this.canvas.on(Node.EventType.TOUCH_START, (event: EventTouch) => {
-            if (this.input) {
-                for (let i = 0; i < 8; i++) {
-                    // HARDCODED VALUES. FIX THIS
-                    if (Math.abs(event.getUILocation().x - 480 - this.keys[i].position.x) < 61 && Math.abs(event.getUILocation().y - 320 - this.keys[i].position.y) < 42) {
-                        this.flash.active = true;
-                        this.flash.getComponent(Animation)?.play("color" + col_ord[i] + "_bg");
-                        this.input = false;
-                        this.schedule(() => {
-                            this.music.pause();
-                            if (i == this.chosen)
-                                this.ending.remoteURL = "video/right_key.mp4";
-                            else
-                                this.ending.remoteURL = "video/wrong_key.mp4";
-                            this.ending.play();
-                        }, 0, 0, 0.6);
-                    }
+        for (let i = 0; i < 8; i++) {
+            this.keys[i].on(Node.EventType.TOUCH_START, () => {
+                if (this.input) {
+                    this.flash.active = true;
+                    this.flash.getComponent(Animation)?.play("color" + col_ord[i] + "_bg");
+                    this.input = false;
+                    this.schedule(() => {
+                        if (i == this.chosen)
+                            this.ending.remoteURL = "video/right_key.mp4";
+                        else
+                            this.ending.remoteURL = "video/wrong_key.mp4";
+                        this.ending.play();
+                    }, 0, 0, 0.6);
                 }
-            }
-        });
+            })
+        }
 
         for (let t = 1; t <= 5; t++) {
             this.schedule(() => {

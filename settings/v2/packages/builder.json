@@ -1,8 +1,6 @@
 {
-  "__version__": "1.2.8",
+  "__version__": "1.3.5",
   "splash-setting": {
-    "displayWatermark": false,
-    "url": "D:\\Programming Projects\\Cocos\\LimboKeys\\build-templates\\web-mobile\\loading-splash-replacement.png",
-    "totalTime": 0
+    "totalTime": 500
   }
 }
